@@ -1,0 +1,34 @@
+<html>
+<!-- Code based on https://github.com/pjjanak/chromecast-hello-world/tree/49f21c151b5110aa772be25d7c84a32c01bc6d15 -->
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/receiver.css" />
+    </head>
+<body>
+    <div class="messages">
+        <h1>Waiting for Messages...</h1>
+    </div>
+</body>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="https://www.gstatic.com/cast/js/receiver/1.0/cast_receiver.js"></script>
+<script>
+    $(function() {
+        var receiver = new cast.receiver.Receiver('85299eb6-77bf-4522-8c13-9090d446e0b0', ['com.elsewhat.chromecast']),
+        channelHandler = new cast.receiver.ChannelHandler('com.elsewhat.chromecast'),
+        $messages = $('.messages');
+
+        channelHandler.addChannelFactory(
+            receiver.createChannelFactory('com.elsewhat.chromecast'));
+
+        receiver.start();
+
+        channelHandler.addEventListener(cast.receiver.Channel.EventType.MESSAGE, onMessage.bind(this));
+
+        function onMessage(event) {
+        	console.log('onMessage ');
+        	console.log(event);
+        	console.log(event.message);
+            $messages.html(event.message.type);
+        }
+    });
+</script>
+</html>
